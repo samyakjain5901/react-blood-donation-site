@@ -78,6 +78,7 @@ const userSchema = new mongoose.Schema({
   secret: [String],
   googleId: String,
   facebookId: String, 
+  picurL:String,
 });
 const donorSchema = new mongoose.Schema({
   userDetails:userSchema,
@@ -165,12 +166,15 @@ passport.use(User.createStrategy());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/secrets",
+    callbackURL: "http://localhost:5000/auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
     User.findOrCreate({
-      googleId: profile.id
+      email:profile.emails[0].value,
+    },{
+      googleId: profile.id,
+      picurL:profile.photos[0].value,
     }, function(err, user) {
       return cb(err, user);
     });
@@ -180,11 +184,15 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/secrets"
+    callbackURL: "http://localhost:5000/auth/facebook/secrets",
+    profileFields: ['id', 'emails', 'name','picture']
   },
   function(accessToken, refreshToken, profile, cb) {
     User.findOrCreate({
-      facebookId: profile.id
+      email:profile.emails[0].value,
+    },{
+      facebookId: profile.id,
+      picurL:profile.photos[0].value,
     }, function(err, user) {
       return cb(err, user);
     });
@@ -230,7 +238,10 @@ app.get("/logout", function(req, res) {
   res.send("success");
 });
 app.get('/auth/google', passport.authenticate('google', {
-  scope: ['profile']
+  scope: [
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email'
+]
 }));
 
 app.get('/auth/google/secrets', passport.authenticate('google', {
@@ -239,7 +250,7 @@ app.get('/auth/google/secrets', passport.authenticate('google', {
   }),
   function(req, res) {
     console.log(req.user);
-    res.redirect("https://76cjg.csb.app/home")
+    res.redirect("http://localhost:3000/home")
   });
 
 app.get('/auth/facebook',
@@ -250,7 +261,7 @@ app.get('/auth/facebook/secrets',passport.authenticate('facebook', {
   }),
   function(req, res) {
     console.log(req.user);
-    res.redirect("https://76cjg.csb.app/home")
+    res.redirect("http://localhost:3000/home")
   });
 
 app.post("/bloodrequest/getbycode",function(req,res){
@@ -504,7 +515,13 @@ app.get("/getname",function(req,res){
   console.log(req.user);
   res.send(req.user.email);
 })
-
+app.get("/picurl",function(req,res){
+  if(req.user.picurL && req.user.picurL!==""){
+    res.send(req.user.picurL);
+  }else{
+    res.send("No");
+  }
+})
 app.post("/login", (req, res, next) => {
   console.log("got the req atleast");
   passport.authenticate("local", (err, user, info) => {

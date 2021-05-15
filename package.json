@@ -28,7 +28,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node app.js",
+    "server": "nodemon app.js",
     "client": "npm start --prefix bloodDonationFrontEnd",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

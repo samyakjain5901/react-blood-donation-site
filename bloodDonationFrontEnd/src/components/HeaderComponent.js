@@ -25,7 +25,8 @@ class Header extends Component {
       isNavOpen: false,
       isModalOpenIn: false,
       isModalOpenUp: false,
-      name: ""
+      name: "",
+      picUrl: ""
     };
     this.toggleNav = this.toggleNav.bind(this);
     this.toggleModalIn = this.toggleModalIn.bind(this);
@@ -46,12 +47,12 @@ class Header extends Component {
   // }
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
-    if(!prevProps.isLoggedIn && this.props.isLoggedIn){
+    if (!prevProps.isLoggedIn && this.props.isLoggedIn) {
       console.log("called");
       this.getName();
     }
   }
-  
+
   componentDidMount() {
     document.querySelector(".navbar").style.backgroundImage =
       "url(assets/bloodBg.jpg)";
@@ -84,10 +85,16 @@ class Header extends Component {
   }
 
   getName() {
-    axios.get("/getname", { withCredentials: true }).then((response) => {
-      console.log("this");
-      console.log(this);
-      this.setState({ name: response.data });
+    axios.get("/picurl", { withCredentials: true }).then((response) => {
+      if (response.data === "No") {
+        axios.get("/getname", { withCredentials: true }).then((response) => {
+          console.log("this");
+          console.log(this);
+          this.setState({ name: response.data });
+        });
+      } else {
+        this.setState({ picUrl:response.data });
+      }
     });
   }
 
@@ -206,17 +213,35 @@ class Header extends Component {
                     </>
                   ) : (
                     <UncontrolledButtonDropdown>
-                      <DropdownToggle
+                      {this.state.picUrl === "" ? (
+                        <DropdownToggle
+                          style={{
+                            backgroundColor: "#b30000",
+                            borderRadius: "30px"
+                          }}
+                          size="lg"
+                        >
+                          <strong>
+                            {this.state.name.charAt(0).toUpperCase()}
+                          </strong>
+                        </DropdownToggle>
+                      ) : (
+                        <DropdownToggle 
+                        className="imageOfPerson"
                         style={{
-                          backgroundColor: "#b30000",
-                          borderRadius: "30px"
-                        }}
-                        size="lg"
-                      >
-                        <strong>
-                          {this.state.name.charAt(0).toUpperCase()}
-                        </strong>
-                      </DropdownToggle>
+                          padding:"0px",
+                          height:"40px",
+                          width:"55px",
+                          borderRadius:"100%"
+                        }}>
+                           <img style={{
+                            maxHeight:"100%",
+                            maxWidth:"100%",
+                            borderRadius:"100%",
+                            objectFit:"contain"
+                          }} src={this.state.picUrl} alt="img" /> 
+                        </DropdownToggle>
+                      )}
                       <DropdownMenu>
                         <NavLink style={{ color: "black" }} to="/myprofile">
                           <DropdownItem>
@@ -224,13 +249,12 @@ class Header extends Component {
                             Profile
                           </DropdownItem>
                         </NavLink>
-                        <DropdownItem onClick={() => {
-                              this.logMeOut(this.props.toggleLoggedIn);
-                            }}>
-                          <span
-                            className="fa fa-sign-out"
-                          ></span>{" "}
-                          Logout
+                        <DropdownItem
+                          onClick={() => {
+                            this.logMeOut(this.props.toggleLoggedIn);
+                          }}
+                        >
+                          <span className="fa fa-sign-out"></span> Logout
                         </DropdownItem>
                       </DropdownMenu>
                     </UncontrolledButtonDropdown>
