@@ -1,0 +1,96 @@
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.row-header {
+  margin: 0px auto;
+  padding: 0px auto;
+}
+
+.row-content {
+  margin: 0px auto;
+  padding: 50px 0px 50px 0px;
+  border-bottom: 1px ridge;
+  min-height: 400px;
+}
+
+.navbar-dark .navbar-brand {
+  color: red;
+  font-weight: bold;
+}
+
+a.mr-auto.navbar-brand:hover {
+  color: red;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.footer {
+  margin: 0px auto;
+  padding: 20px 0px 20px 0px;
+  color: #ffffff;
+}
+
+.card {
+  background-color: #ff80aa;
+  text-align: center;
+}
+
+.card-img-top {
+  border-radius: 50%;
+  border: 2px solid black;
+  width: 60%;
+  margin: auto;
+}
+
+.jumbotron {
+  background-color: #bff126;
+  padding: 1rem 1rem;
+  text-align: center;
+}
+
+h1 {
+  color: #660000;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.header-line {
+  border: 2px solid #660000;
+}
+
+.media-object {
+  width: 80%;
+  margin: 20px auto;
+}
+
+.media-heading {
+  color: #009900;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 2.8rem;
+}
+
+.media-body p {
+  font-size: 1.3rem;
+}
+
+.about-text {
+  font-size: 18px;
+}
+
+.about-line {
+  border: 2px solid #000766;
+  width: 95%;
+}
+
+.card .card-body {
+  font-size: 1.2rem;
+}
+
+.home-table {
+  padding: 0;
+  border: 2px solid black;
+  max-height: 15;
+}

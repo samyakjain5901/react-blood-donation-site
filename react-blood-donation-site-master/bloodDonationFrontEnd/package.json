@@ -1,0 +1,39 @@
+{
+  "name": "blood-donation-site",
+  "version": "1.0.0",
+  "description": "making it currently",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "axios": "0.21.1",
+    "bootstrap": "4.6.0",
+    "bootstrap-social": "5.1.1",
+    "country-state-city": "2.0.0",
+    "font-awesome": "4.7.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-hover-animation": "2.1.1",
+    "react-indian-state-region-selector": "6.1.0",
+    "react-router-dom": "5.2.0",
+    "react-scripts": "4.0.0",
+    "react-table": "7.6.3",
+    "reactstrap": "8.9.0"
+  },
+  "devDependencies": {
+    "@babel/runtime": "7.13.8",
+    "typescript": "4.1.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:5000",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
