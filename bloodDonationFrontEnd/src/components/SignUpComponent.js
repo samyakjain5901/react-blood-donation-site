@@ -108,28 +108,36 @@ function SignUp(props) {
     setOtpMssg("X");
     setShowVerifyBtton(true);
   }
+  function handleSuccessGoogle() {
+    window.open("http://localhost:5000/auth/google", "_self");
+  }
+  function handleSuccessFacebook() {
+    window.open("http://localhost:5000/auth/facebook", "_self");
+  }
   function handleSubmitLocal(event) {
     props.toggleModalUp();
     const userInfo = {
       email: emailid,
       password: passwords.password
     };
-    axios.post("/register", userInfo,{withCredentials:true}).then((response) => {
-      if (
-        response.data === "A user with this id already exists Login Instead"
-      ) {
-        alert(
-          "A user with the following email id already exists Log in instead"
-        );
-        resetModal();
-      } else if (response.data === "error") {
-        alert("OOPs there was an error.Plz try again!");
-        resetModal();
-      } else {
-        props.getName();
-        props.toggleLoggedIn();
-      }
-    });
+    axios
+      .post("/register", userInfo, { withCredentials: true })
+      .then((response) => {
+        if (
+          response.data === "A user with this id already exists Login Instead"
+        ) {
+          alert(
+            "A user with the following email id already exists Log in instead"
+          );
+          resetModal();
+        } else if (response.data === "error") {
+          alert("OOPs there was an error.Plz try again!");
+          resetModal();
+        } else {
+          props.getName();
+          props.toggleLoggedIn();
+        }
+      });
     // props.toggleLoggedIn();
     event.preventDefault();
   }
@@ -138,10 +146,13 @@ function SignUp(props) {
       <ModalHeader toggle={resetModal}>Sign Up</ModalHeader>
       <ModalBody>
         <Form onSubmit={VerifyEmail}>
-          <Button type="submit" color="danger">
+          <Button color="danger" onClick={handleSuccessGoogle}>
             Google
           </Button>{" "}
-          <Button type="submit" color="primary">
+          <Button
+            color="primary"
+            onClick={handleSuccessFacebook}
+          >
             Facebook
           </Button>
           <FormGroup>

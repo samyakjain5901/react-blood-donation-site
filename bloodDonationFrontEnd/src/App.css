@@ -34,7 +34,11 @@ a:hover {
   padding: 20px 0px 20px 0px;
   color: #ffffff;
 }
-
+/* .imageOfPerson{
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+} */
 .card {
   background-color: #ffb3b3;
   text-align: center;
