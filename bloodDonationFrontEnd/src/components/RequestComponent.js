@@ -106,6 +106,15 @@ class Request extends Component {
       .then((response) => {
         //handle the response here properly and adequately
         alert(response.data.message);
+        axios
+          .post(
+            "/bloodrequest/sendemail",
+            { code: response.data.newReqCode },
+            { withCredentials: true }
+          )
+          .then((response) => {
+            alert(response.data.message);
+          });
       });
   }
 

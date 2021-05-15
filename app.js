@@ -456,11 +456,56 @@ app.post("/bloodrequest/new",function(req,res){
       newReq.save();
       res.send({
         message:"successfully saved the document",
-        request:[...FoundDocuments,newReq]
+        request:[...FoundDocuments,newReq],
+        newReqCode:newReq.code,
       });
     }
   })
-  
+})
+
+app.post("/bloodrequest/sendemail",function(req,res){
+  const reqCode=req.body.code; 
+  BloodRequest.findOne({code:reqCode},function(err,Request){
+    if(Request){
+      Donor.find({
+        bloodGroup:{ $in: bldGrpChartForRec[Request.bloodGroup] },
+        state:Request.state,
+        city:Request.city,
+        'userDetails._id':{$ne:req.user._id},
+      },function(err,Donors){
+        // console.log(Donors,Request);
+        // res.send("yo");
+        const txt="It is hereby informed that "+ 
+        Request.name+" is in need of blood of "+ Request.bloodGrp+ " for " +Request.purpose
+        + " at " +Request.hospitalName+". Plz contact "+Request.mobileNumber+" or "+
+        Request.userDetails.email+ " if you are available and wish to help which will be highly appreciated.";
+        Donors.forEach(element => {
+          const mailId=element.userDetails.email;
+          var mailOptions = {
+            from: 'bloodforyou5@gmail.com',
+            to: mailId,
+            subject: 'Req for Blood by a Patient in need',
+            text: txt,
+          };
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log("noo thats fuckign wrong");
+            } else {
+              console.log('Email sent!! ');
+            }
+        });
+      });
+      res.send({
+        message:"An email has been sent to all the donors near you for your case and we hope you find a person and get well soon!!",
+        donors:Donors,
+      });
+    })
+  }else{
+      res.send({
+        message:"No request with this code was found",
+      });
+    }
+  })
 })
 
 app.get("/bloodrequest/getlatestrequests",function(req,res){
